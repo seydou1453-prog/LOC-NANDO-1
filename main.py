@@ -144,4 +144,13 @@ async def evaluate_feynman(concept: str = Form(...), student_explanation: str = 
     resp = model.generate_content(prompt)
     clean_json = resp.text.replace("```json", "").replace("```", "").strip()
     return {"status": "ok", "evaluation": json.loads(clean_json)}
-  
+  from fastapi.responses import HTMLResponse
+import os
+
+@app.get("/", response_class=HTMLResponse)
+async def read_index():
+    if os.path.exists("index.html"):
+        with open("index.html", "r", encoding="utf-8") as f:
+            return f.read()
+    return "<h1>Bienvenue sur LOC-NANDO ! Fichier index.html introuvable.</h1>"
+    
